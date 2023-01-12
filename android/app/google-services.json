@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "348720079980",
+    "project_id": "airart-2a90c",
+    "storage_bucket": "airart-2a90c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348720079980:android:b699bedcd2d9f7684ba449",
+        "android_client_info": {
+          "package_name": "com.sorosons.airart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348720079980-j30fhqrgus2j108jac90pudqpsar5f90.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEL4AVcSQzOwxIVDgLVkzCBaFQu8nKG-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348720079980-j30fhqrgus2j108jac90pudqpsar5f90.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348720079980:android:8f795c02b1d915f24ba449",
+        "android_client_info": {
+          "package_name": "com.sorosons.airart.aiart"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348720079980-j30fhqrgus2j108jac90pudqpsar5f90.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEL4AVcSQzOwxIVDgLVkzCBaFQu8nKG-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348720079980-j30fhqrgus2j108jac90pudqpsar5f90.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
