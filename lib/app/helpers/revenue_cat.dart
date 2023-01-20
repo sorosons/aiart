@@ -10,6 +10,7 @@ class RevenueCatHelper {
     // Enable debug logs before calling `configure`.
     await Purchases.setDebugLogsEnabled(true);
     print("AA");
+    // PurchasesConfiguration(Constant.apiKey);
     await Purchases.setup(Constant.apiKey,
         appUserId: null, observerMode: false);
 
@@ -62,7 +63,10 @@ class RevenueCatHelper {
   Future<CustomerInfo> restoreSubscription() async {
     late CustomerInfo purchaserInfo;
     try {
-      purchaserInfo = await Purchases.getCustomerInfo();
+      //purchaserInfo = await Purchases.getCustomerInfo();
+      purchaserInfo = await Purchases.restorePurchases();
+
+      //logger.wtf(xxx.activeSubscriptions.length);
       // access latest purchaserInfo
       logger.i("active Subs");
       logger.i(purchaserInfo.activeSubscriptions.toString() +

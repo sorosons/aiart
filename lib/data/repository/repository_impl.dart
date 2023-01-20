@@ -1,3 +1,4 @@
+import 'package:complete_advanced_flutter/app/logger_settings.dart';
 import 'package:complete_advanced_flutter/data/data_source/local_data_source.dart';
 import 'package:complete_advanced_flutter/data/data_source/remote_data_source.dart';
 import 'package:complete_advanced_flutter/data/mapper/mapper.dart';
@@ -46,6 +47,23 @@ class RepositoryImpl extends Repository {
         if (response.images != null) return Right(response.toDomain());
         return Left(ErrorHandler.handle("error").failure);
       } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
+      }
+    } else {
+      return Left(DataSource.NO_INTERNET_CONNECTION.getFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ImageModel>> getQualityArt(String art) async {
+    logger.e("Repoir");
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _remoteDataSource.getQualityArts(art);
+        if (response.images.isNotEmpty) return Right(response);
+        return Left(ErrorHandler.handle("error").failure);
+      } catch (error) {
+        logger.e(error.toString());
         return Left(ErrorHandler.handle(error).failure);
       }
     } else {

@@ -4,13 +4,13 @@ import 'package:complete_advanced_flutter/presentation/main/main_view_model.dart
 import 'package:complete_advanced_flutter/presentation/resources/assets_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/color_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/strings_manager.dart';
-import 'package:complete_advanced_flutter/presentation/resultpage/result_page.dart';
-import 'package:complete_advanced_flutter/presentation/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/scheduler.dart';
 
+import '../../app/constant.dart';
 import '../../app/di.dart';
+import '../../app/helpers/firebase_remote.dart';
 import '../../app/helpers/revenue_cat.dart';
 import '../../app/logger_settings.dart';
 import '../../domain/model/model.dart';
@@ -27,10 +27,10 @@ class _MainViewState extends State<MainView> {
   var _promptController = TextEditingController();
 
   MainViewModel _mainViewModel = instance<MainViewModel>();
+  FiBaseRemoteConfig _fiBaseRemoteConfig = instance<FiBaseRemoteConfig>();
 
   @override
   void initState() {
-    _mainViewModel.start();
     _bind();
     super.initState();
   }
@@ -42,6 +42,7 @@ class _MainViewState extends State<MainView> {
   }
 
   _bind() async {
+    _mainViewModel.start();
     _promptController.addListener(() {
       _mainViewModel.setPrompText(_promptController.text);
     });
@@ -203,6 +204,7 @@ class _MainViewState extends State<MainView> {
     // backing data
 
     List<MyPrompts> _items = [
+      MyPrompts("A Lighthouse Above The Sea", ImageAssets.styleIcon3),
       MyPrompts("Pink Cat", ImageAssets.styleIcon1),
       MyPrompts("Foggy Forest", ImageAssets.styleIcon2),
       MyPrompts("Life Under Ground", ImageAssets.styleIcon3),
@@ -370,9 +372,21 @@ class _MainViewState extends State<MainView> {
                   onPressed: snapshot.data == true
                       ? () {
                           _mainViewModel.isPremium.listen((premium) {
-                            logger.i("Creat Art" + premium.toString());
                             if (premium) {
-                              _mainViewModel.createArt();
+                              try {
+                                _fiBaseRemoteConfig.getValue().then((value) {
+                                  logger.e("value:" + value.toString());
+                                  if (value == false) {
+                                    _mainViewModel.createQualityArt();
+                                  } else {
+                                    _mainViewModel.createArt();
+                                  }
+                                });
+                              } on FormatException catch (ex) {
+                                logger.e("catchccc");
+                                logger.e(ex);
+                                _mainViewModel.createQualityArt();
+                              }
                             } else {
                               Navigator.pushNamed(context, Routes.premiumPage);
                             }

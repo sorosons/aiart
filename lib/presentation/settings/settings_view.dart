@@ -1,11 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:complete_advanced_flutter/app/di.dart';
 import 'package:complete_advanced_flutter/domain/model/model.dart';
+import 'package:complete_advanced_flutter/presentation/common/state_renderer/state_render_impl.dart';
 import 'package:complete_advanced_flutter/presentation/resources/color_manager.dart';
 import 'package:complete_advanced_flutter/presentation/resources/routes_manager.dart';
 import 'package:complete_advanced_flutter/presentation/settings/settings_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
+import '../../app/helpers/revenue_cat.dart';
+import '../../app/logger_settings.dart';
+import '../common/state_renderer/state_renderer.dart';
 import '../resources/assets_manager.dart';
 
 class SettingsView extends StatefulWidget {
@@ -20,7 +25,7 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    _settingsViewModel.start();
     super.initState();
   }
 
@@ -46,77 +51,104 @@ class _SettingsViewState extends State<SettingsView> {
           },
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    ColorManager.grad1,
-                    ColorManager.grad2,
-                    ColorManager.grad3,
-                    ColorManager.grad4,
-                    ColorManager.grad5,
-                  ],
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 0, left: 8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Air Art",
-                            style: TextStyle(color: Colors.white, fontSize: 30),
-                          ),
-                          _premiumFeatures("Fast Processing"),
-                          SizedBox(height: 5),
-                          _premiumFeatures("Remove Ads"),
-                          SizedBox(height: 5),
-                          _premiumFeatures("Unlimited artwork Creation"),
-                          SizedBox(height: 10),
-                          _tryProNow(context),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: _stackedImage(),
-                  )
+      body: StreamBuilder<FlowState>(
+          stream: _settingsViewModel.outputState,
+          builder: (context, snapshot) {
+            return snapshot.data?.getScreenWidget(context, _getContent(context),
+                    () {
+                  if (snapshot.data?.getStateRendererType() ==
+                      StateRendererType.CONTENT_SCREEN_STATE) {
+                    logger.wtf("WTF::: OK");
+                  } else if (snapshot.data?.getStateRendererType() ==
+                      StateRendererType.POPUP_ERROR_STATE) {
+                    Navigator.of(context).pop();
+                  } else if (snapshot.data?.getStateRendererType() ==
+                      StateRendererType.POPUP_SUCCESS) {
+                    logger.w("I m info");
+                    Phoenix.rebirth(context);
+                  } else {
+                    Phoenix.rebirth(context);
+                    //  Navigator.pushReplacementNamed(context, Routes.mainPage);
+
+                  }
+                }) ??
+                Container();
+            return _getContent(context);
+          }),
+    );
+  }
+
+  Widget _getContent(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.4,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  ColorManager.grad1,
+                  ColorManager.grad2,
+                  ColorManager.grad3,
+                  ColorManager.grad4,
+                  ColorManager.grad5,
                 ],
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: ColorManager.primary,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0, left: 8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Air Art",
+                          style: TextStyle(color: Colors.white, fontSize: 30),
+                        ),
+                        _premiumFeatures("Fast Processing"),
+                        SizedBox(height: 5),
+                        _premiumFeatures("Remove Ads"),
+                        SizedBox(height: 5),
+                        _premiumFeatures("Unlimited artwork Creation"),
+                        SizedBox(height: 10),
+                        //_tryProNow(context),
+                      ],
+                    ),
                   ),
                 ),
-                child: _listTile(),
-              ),
+                Expanded(
+                  child: _stackedImage(),
+                )
+              ],
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: ColorManager.primary,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              child: _listTile(),
+            ),
+          ),
+        )
+      ],
     );
   }
 
@@ -124,6 +156,8 @@ class _SettingsViewState extends State<SettingsView> {
     List<SettingsListTile> _listItems = [
       SettingsListTile(
           ImageAssets.listTileIcon, Colors.red, "Share Me", Icons.star_rate),
+      SettingsListTile(
+          ImageAssets.listTileIcon, Colors.red, "Restore", Icons.restore),
       SettingsListTile(ImageAssets.listTileIcon, Colors.green, "Like Rate Us",
           Icons.settings),
       SettingsListTile(ImageAssets.listTileIcon, Colors.orange, "Term Of Us",
@@ -139,8 +173,6 @@ class _SettingsViewState extends State<SettingsView> {
       itemBuilder: (BuildContext context, int index) {
         return ListTile(
           onTap: () {
-            print(_listItems[index].tittle);
-
             switch (index) {
               case 0:
                 {
@@ -149,20 +181,25 @@ class _SettingsViewState extends State<SettingsView> {
                 break;
               case 1:
                 {
-                  _settingsViewModel.likeRateUs();
+                  _settingsViewModel.restore();
                 }
                 break;
               case 2:
                 {
-                  _settingsViewModel.termOfUs();
+                  _settingsViewModel.likeRateUs();
                 }
                 break;
               case 3:
                 {
-                  _settingsViewModel.privacyPolicy();
+                  _settingsViewModel.termOfUs();
                 }
                 break;
               case 4:
+                {
+                  _settingsViewModel.privacyPolicy();
+                }
+                break;
+              case 5:
                 {
                   _settingsViewModel.sendEmail();
                 }

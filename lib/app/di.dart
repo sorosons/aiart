@@ -12,8 +12,10 @@ import 'package:complete_advanced_flutter/presentation/resultpage/result_page_vi
 import 'package:complete_advanced_flutter/presentation/settings/settings_viewmodel.dart';
 import 'package:complete_advanced_flutter/presentation/splash/splash_view_model.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,16 +23,32 @@ import '../firebase_options.dart';
 import '../presentation/main/main_view_model.dart';
 import '../presentation/premium/premium_viewmodel.dart';
 import 'app_prefs.dart';
+import 'constant.dart';
+import 'helpers/firebase_remote.dart';
 import 'helpers/revenue_cat.dart';
 
 final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
   final sharedPrefs = await SharedPreferences.getInstance();
+
+  await Purchases.setDebugLogsEnabled(true);
+  print("AA");
+  await Purchases.setup(Constant.apiKey, appUserId: null, observerMode: false);
+
   //Fireba se initalization
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FirebaseRemoteConfig _firebaseRemoteConfig =
+      await FirebaseRemoteConfig.instance;
+
+  // firebase remote config instance
+  instance
+      .registerLazySingleton<FirebaseRemoteConfig>(() => _firebaseRemoteConfig);
+  instance.registerLazySingleton<FiBaseRemoteConfig>(
+      () => FiBaseRemoteConfig(instance()));
 
   // shared prefs instance
   instance.registerLazySingleton<SharedPreferences>(() => sharedPrefs);
@@ -85,7 +103,8 @@ initMainView() {
   if (!GetIt.I.isRegistered<CreateArtUseCase>()) {
     instance
         .registerFactory<CreateArtUseCase>(() => CreateArtUseCase(instance()));
-    instance.registerFactory<MainViewModel>(() => MainViewModel(instance(),instance()));
+    instance.registerFactory<MainViewModel>(
+        () => MainViewModel(instance(), instance()));
   }
 }
 

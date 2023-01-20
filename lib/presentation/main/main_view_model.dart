@@ -7,6 +7,7 @@ import 'package:complete_advanced_flutter/presentation/base/baseviewmodel.dart';
 import 'package:complete_advanced_flutter/presentation/common/freezed_data_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:web_scraper/web_scraper.dart';
 
 import '../../app/helpers/revenue_cat.dart';
 import '../common/state_renderer/state_render_impl.dart';
@@ -70,6 +71,27 @@ class MainViewModel extends BaseViewModel
     (await _createArtUseCase
             .execute(inputObject.promptValue + " " + inputObject.styleValue))
         .fold((failure) {
+      inputState.add(
+          ErrorState(StateRendererType.POPUP_ERROR_STATE, failure.message));
+    }, (success) {
+      logger.i("messageSCS");
+
+      //inputState.add(ContentState());
+      inputImageData.add(success);
+      isUserclickedCreateArtBtn.add("Succes");
+      logger.i("messageSCS");
+      singleton.imageItems = success;
+    });
+  }
+
+  @override
+  createQualityArt() async {
+    inputState.add(
+        LoadingState(stateRendererType: StateRendererType.POPUP_LOADING_STATE));
+    (await _createArtUseCase.createQualityArtUseCase(
+            inputObject.promptValue + " " + inputObject.styleValue))
+        .fold((failure) {
+      logger.e(failure.message);
       inputState.add(
           ErrorState(StateRendererType.POPUP_ERROR_STATE, failure.message));
     }, (success) {
@@ -161,6 +183,7 @@ class MainViewModel extends BaseViewModel
 
 abstract class MainViewModelInputs {
   createArt();
+  createQualityArt();
   setPrompText(String prompt);
   setStyleText(String style);
   Sink get promptText;

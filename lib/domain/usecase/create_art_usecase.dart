@@ -12,4 +12,8 @@ class CreateArtUseCase extends BaseUseCase {
   Future<Either<Failure, ImageModel>> execute(input) {
     return _repository.getArt(input);
   }
+
+  Future<Either<Failure, ImageModel>> createQualityArtUseCase(input) {
+    return _repository.getQualityArt(input);
+  }
 }

@@ -56,7 +56,7 @@ class SubscriptionViewModel extends BaseViewModel
 
   @override
   clickOkBtn() {
-    logger.wtf("Clicked");
+
     inputState.add(ContentState());
   }
 

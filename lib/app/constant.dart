@@ -1,5 +1,7 @@
 import 'dart:io' show Platform;
 
+import 'package:complete_advanced_flutter/app/logger_settings.dart';
+
 class Constant {
   static const String baseUrl = "https://lexica.art/api/v1/search";
   static const String token = "get api token here";
@@ -11,15 +13,29 @@ class Constant {
   static const String emailSupport = "gumuseyhmus@gmail.com";
   // add the API key for your app from the RevenueCat dashboard: https://app.revenuecat.com
   // static const apiKey = 'hGEbeLEdMxaYTpuEotstStjNdjBicAwq';
-  static const apiKey = 'appl_szRiPgBrezlHZRSBqdYnGRqAnwC';
 
-//TO DO: add the entitlement ID from the RevenueCat dashboard that is activated upon successful in-app purchase for the duration of the purchase.
-//const entitlementID = 'week';
-  static const entitlementID = 'monthly';
+  static String get apiKey {
+    if (Platform.isAndroid) {
+      return "goog_dtVTIOFMByyHOTYaGopresvajHT";
+    } else {
+      logger.i("I AM IOS");
+      return "appl_szRiPgBrezlHZRSBqdYnGRqAnwC";
+    }
+  }
+
+  static String get entitlementID {
+    if (Platform.isAndroid) {
+      return "monthly";
+    } else {
+      return "monthly";
+    }
+  }
 
   static String get appUrl {
+    logger.e("isAndroid");
+    logger.e(Platform.isAndroid);
     if (Platform.isAndroid) {
-      return "https://play.google.com/store/apps/details?id=com.instly";
+      return "https://play.google.com/store/apps/details?id=com.sorosons.airart";
     } else {
       return "https://apps.apple.com/us/app/ai-art-draw-picture/id6444043389";
     }
@@ -39,3 +55,8 @@ class AppData {
 }
 
 final appData = AppData();
+
+class CustomException implements Exception {
+  String cause;
+  CustomException(this.cause);
+}

@@ -169,7 +169,7 @@ extension FlowStateExtension on FlowState {
           // show popup
           showPopUp(context, StateRendererType.POPUP_SUCCESS, getMessage(),
               retryActionFunction,
-              title: AppStrings.success.tr());
+              title: getMessage());
           // return content ui of the screen
           return contentScreenWidget;
         }

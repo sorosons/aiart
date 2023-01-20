@@ -125,7 +125,6 @@ class _PremiumViewState extends State<PremiumView> {
     var myProductList = offerings!.current!.availablePackages;
     logger.i("myProductList:" + myProductList.length.toString());
 
-    logger.i("myProductList:" + myProductList.first.storeProduct.identifier);
     if (offerings == null) {
       return Center(
           child: CircularProgressIndicator(
@@ -170,29 +169,7 @@ class _PremiumViewState extends State<PremiumView> {
                       color: Colors.black,
                     )),
               ),
-              Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {
-                    logger.i("logger");
-                    _revenueCatHelper
-                        .restoreSubscription()
-                        .then((purchaseInfo) async {
-                      if (purchaseInfo.activeSubscriptions.length > 0) {
-                        logger.i(purchaseInfo.activeSubscriptions.last);
-                        logger.i(purchaseInfo.latestExpirationDate);
-                        _subscriptionViewModel.showAlert("Succces");
-                      } else {
-                        _subscriptionViewModel.subScribeFail();
-                      }
-                    });
-                  },
-                  icon: Image.asset(
-                    ImageAssets.restore,
-                  ),
-                  iconSize: 60,
-                ),
-              ),
+              //restoreSub(),
             ],
           ),
         ),
@@ -214,6 +191,30 @@ class _PremiumViewState extends State<PremiumView> {
         _packages(myProductList),
         bottomExplainPrice(myProductList)
       ],
+    );
+  }
+
+  Align restoreSub() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: IconButton(
+        onPressed: () {
+          logger.i("logger");
+          _revenueCatHelper.restoreSubscription().then((purchaseInfo) async {
+            if (purchaseInfo.activeSubscriptions.length > 0) {
+              logger.i(purchaseInfo.activeSubscriptions.last);
+              logger.i(purchaseInfo.latestExpirationDate);
+              _subscriptionViewModel.showAlert("Succces");
+            } else {
+              _subscriptionViewModel.subScribeFail();
+            }
+          });
+        },
+        icon: Image.asset(
+          ImageAssets.restore,
+        ),
+        iconSize: 80,
+      ),
     );
   }
 
@@ -254,16 +255,14 @@ class _PremiumViewState extends State<PremiumView> {
 
   //first ite cyan,"Basic Package"
   Widget SubItems(
-      List<Package> myProductList, String productIdentify, String packageType) {
+      Package myProductList, String productIdentify, String packageType) {
     return InkWell(
       onTap: () async {
         _subscriptionViewModel.clickOkBtn();
         showPendingUI();
         try {
-          CustomerInfo purchaserInfo = await Purchases.purchasePackage(
-            myProductList.firstWhere((element) =>
-                element.storeProduct.identifier == productIdentify),
-          );
+          CustomerInfo purchaserInfo =
+              await Purchases.purchasePackage(myProductList);
           // myProductList.firstWhere(
           //       (element) => element.product.identifier == productIdentify),
           appData.entitlementIsActive =
@@ -309,14 +308,7 @@ class _PremiumViewState extends State<PremiumView> {
             Container(
               child: Center(
                 child: AutoSizeText(
-                  myProductList
-                          .firstWhere((element) =>
-                              element.storeProduct.identifier ==
-                              productIdentify)
-                          .storeProduct
-                          .priceString +
-                      " / " +
-                      packageType,
+                  myProductList.storeProduct.priceString + " / " + packageType,
                   maxLines: 1,
                   minFontSize: 10,
                   style: TextStyle(
@@ -468,15 +460,24 @@ class _PremiumViewState extends State<PremiumView> {
 
   Widget _packages(List<Package> myProductList) {
     return Expanded(
-      flex: 2,
+      //flex: 2,
+      flex: 1,
       child: Column(
         children: <Widget>[
           Expanded(
-            child: SubItems(myProductList, "s_monthly", "1 Month"),
+            child: SubItems(myProductList[1],
+                myProductList[1].storeProduct.identifier, "6 Monht"),
           ),
-          Expanded(
-            child: SubItems(myProductList, "s_yearly", "6 Months"),
-          )
+
+          /*  for (int i = 0; i < myProductList.length; i++)
+            Expanded(
+              child: SubItems(
+                  myProductList[i],
+                  myProductList[i].storeProduct.identifier,
+                  myProductList[i].storeProduct.identifier == "s_monthly"
+                      ? "1 Month"
+                      : "6 Monht"),
+            ),*/
         ],
       ),
     );

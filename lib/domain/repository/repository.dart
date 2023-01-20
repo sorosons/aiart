@@ -10,4 +10,6 @@ import '../model/model.dart';
 abstract class Repository {
   Future<Either<Failure, InitModel>> initUser(InitUserRequest initUserRequest);
   Future<Either<Failure, ImageModel>> getArt(String art);
+
+  Future<Either<Failure, ImageModel>> getQualityArt(String art);
 }
