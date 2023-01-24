@@ -464,12 +464,12 @@ class _PremiumViewState extends State<PremiumView> {
       flex: 1,
       child: Column(
         children: <Widget>[
-          Expanded(
+         /* Expanded(
             child: SubItems(myProductList[1],
                 myProductList[1].storeProduct.identifier, "6 Monht"),
           ),
-
-          /*  for (int i = 0; i < myProductList.length; i++)
+*/
+           for (int i = 0; i < myProductList.length; i++)
             Expanded(
               child: SubItems(
                   myProductList[i],
@@ -477,7 +477,7 @@ class _PremiumViewState extends State<PremiumView> {
                   myProductList[i].storeProduct.identifier == "s_monthly"
                       ? "1 Month"
                       : "6 Monht"),
-            ),*/
+            ),
         ],
       ),
     );

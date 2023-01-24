@@ -392,7 +392,9 @@ class _MainViewState extends State<MainView> {
                             }
                           });
                         }
-                      : null,
+                      : (){
+                    Navigator.pushNamed(context, Routes.premiumPage);
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
