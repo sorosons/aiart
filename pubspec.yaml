@@ -63,6 +63,9 @@ dependencies:
   web_scraper: ^0.1.4
   firebase_remote_config: ^3.0.9
   intl: ^0.17.0
+  sizer: ^2.0.15
+  layout_simulator: ^0.1.2
+  kartal: ^2.8.0
 
 
 
