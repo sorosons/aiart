@@ -7,19 +7,19 @@ class Constant {
   static const String token = "get api token here";
 
   static const String privacyUrl =
-      "https://docs.google.com/document/d/1w98rDEJ9xMGs4m_DOZrOJQAIz42gfznpV8prAG8M3go";
+      "your_privacy_url";
   static const String termOfUsUrl =
-      "https://docs.google.com/document/d/1w98rDEJ9xMGs4m_DOZrOJQAIz42gfznpV8prAG8M3go";
-  static const String emailSupport = "gumuseyhmus@gmail.com";
+      "term_of_us_url";
+  static const String emailSupport = "support@gmail.com";
   // add the API key for your app from the RevenueCat dashboard: https://app.revenuecat.com
-  // static const apiKey = 'hGEbeLEdMxaYTpuEotstStjNdjBicAwq';
+  // static const apiKey = 'revenuecatApiKEy';
 
   static String get apiKey {
     if (Platform.isAndroid) {
-      return "goog_dtVTIOFMByyHOTYaGopresvajHT";
+      return "Apikey_Android";
     } else {
-      logger.i("I AM IOS");
-      return "appl_szRiPgBrezlHZRSBqdYnGRqAnwC";
+      
+      return "Apikey_IOS";
     }
   }
 
@@ -35,9 +35,9 @@ class Constant {
     logger.e("isAndroid");
     logger.e(Platform.isAndroid);
     if (Platform.isAndroid) {
-      return "https://play.google.com/store/apps/details?id=com.sorosons.airart";
+      return "google_play_url";
     } else {
-      return "https://apps.apple.com/us/app/ai-art-draw-picture/id6444043389";
+      return "apple_store_url";
     }
   }
 }
