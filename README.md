@@ -24,10 +24,7 @@
 
 <p>To start using AIart, simply download the app from Google Play or the App Store on your Android or iOS device. Dive into the world of digital artistry and unleash your creativity!</p>
 
-<h2>Contributing</h2>
-
-<p>We welcome contributions from the community! If you encounter issues, have feature suggestions, or want to contribute to AIart's development, please open an issue or create a pull request. Before contributing, please read our <a href="link-to-your-contributing-guidelines">Contribution Guidelines</a> for a smooth collaboration process.</p>
-
+ 
 <h2>Connect with Us</h2>
 
 <p>Stay updated on AIart's latest developments and connect with our community:</p>
