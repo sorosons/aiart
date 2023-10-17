@@ -33,9 +33,8 @@
 <p>Stay updated on AIart's latest developments and connect with our community:</p>
 
 <ul>
-  <li><strong>Website:</strong> <a href="https://aiart.example.com">AIart Official Website</a></li>
-  <li><strong>Twitter:</strong> <a href="https://twitter.com/AIartOfficial">@AIartOfficial</a></li>
-  <li><strong>Instagram:</strong> <a href="https://www.instagram.com/AIart_Official/">@AIart_Official</a></li>
+  <li><strong>E-Mail:</strong> <a href="gumuseyhmus@gmail.com">gumuseyhmus@gmail.com</a></li>
+  
 </ul>
 
  
